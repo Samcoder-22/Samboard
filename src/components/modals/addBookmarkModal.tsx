@@ -19,6 +19,7 @@ export default function AddBookmarkModal({ isOpen, onClose }: { isOpen: boolean;
       if (!title) setTitle(domain.replace("www.", ""));
     } catch {
       // Invalid URL — ignore
+       return "/default-favicon.png";
     }
   }
 
