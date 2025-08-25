@@ -55,10 +55,10 @@ export default function HomePage() {
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
       />
-      <EditBookmarkModal
+      {/* <EditBookmarkModal
         isOpen={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
-      />
+      /> */}
     </div>
   );
 }
