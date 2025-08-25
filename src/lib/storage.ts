@@ -20,6 +20,6 @@ export function getBookmarks() {
   return data ? JSON.parse(data) : [];
 }
 
-export function saveBookmarks(bookmarks: any[]) {
+export function saveBookmarks(bookmarks: unknown[]) {
   localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
 }
