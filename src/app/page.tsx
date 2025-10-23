@@ -1,15 +1,29 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookmarkGrid from "@/components/grid/BookmarkGrid";
 import AddBookmarkModal from "@/components/modals/addBookmarkModal";
 import EditBookmarkModal from "@/components/modals/EditBookmarkModal";
+import SettingsModal from "@/components/modals/SettingsModal";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import SearchBar from "@/components/widgets/Searchbar";
 import ClockWidget from "@/components/widgets/ClockWidget";
+import { updateDynamicWallpaper } from "@/lib/utils/updateDynamicWallpaper";
 
 export default function HomePage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isSettingsModalOpen, setSettingsModalOpen] = useState(false);
+
+  useEffect(() => {
+  updateDynamicWallpaper();
+
+  const interval = setInterval(() => {
+    updateDynamicWallpaper();
+  }, 60 * 1000); 
+
+  return () => clearInterval(interval);
+}, []); 
+
 
   return (
     <div className="p-6 h-[100dvh] flex flex-col">
@@ -29,6 +43,11 @@ export default function HomePage() {
             <li>
               <button onClick={() => setEditModalOpen(true)}>
                 Edit Bookmarks
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setSettingsModalOpen(true)}>
+                Settings
               </button>
             </li>
           </ul>
@@ -60,6 +79,10 @@ export default function HomePage() {
         isOpen={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
       />
+      <SettingsModal
+        isOpen={isSettingsModalOpen}
+        onClose={()=> setSettingsModalOpen(false)}
+        />
     </div>
   );
 }

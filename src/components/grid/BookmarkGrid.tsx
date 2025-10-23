@@ -49,13 +49,13 @@ export default function BookmarkGrid({ rows = 1, cols = 4 }: BookmarkGridProps) 
       {filtered.length === 0 && searchQuery && (
         <div className="mt-6 text-center">
           <p className="mb-2 text-sm text-gray-500">No bookmarks found.</p>
-          <a
+          {/* <a
             href={`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`}
             target="_blank"
             className="btn btn-primary"
           >
             Search Google for {searchQuery}
-          </a>
+          </a> */}
         </div>
       )}
 
