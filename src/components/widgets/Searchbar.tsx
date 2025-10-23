@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBookmarksStore } from "@/stores/bookmarkStore";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -15,15 +15,24 @@ export default function SearchBar() {
     }
   };
 
+   const inputRef = useRef<HTMLInputElement>(null);
+
   const handleClear = () => {
     setSearchQuery("");
   };
+
+  useEffect(() => {
+    // Focus input when page first loads
+    inputRef.current?.focus();
+  }, []);
+
 
   const showPlaceholder = !isFocused && searchQuery === "";
 
   return (
     <div className="w-full max-w-2xl mx-auto relative">
       <input
+        ref={inputRef}
         type="text"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
