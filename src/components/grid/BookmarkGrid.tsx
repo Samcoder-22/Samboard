@@ -32,7 +32,7 @@ export default function BookmarkGrid({ rows = 1, cols = 4 }: BookmarkGridProps) 
             key={bm.id}
             href={bm.url}
             target="_blank"
-            className="flex flex-col items-center p-4 bg-base-200 rounded-lg shadow hover:shadow-lg transition"
+            className="flex flex-col items-center p-4 rounded-lg shadow hover:shadow-lg transition glass"
           >
             {bm.icon && (
               <img
@@ -48,14 +48,14 @@ export default function BookmarkGrid({ rows = 1, cols = 4 }: BookmarkGridProps) 
 
       {filtered.length === 0 && searchQuery && (
         <div className="mt-6 text-center">
-          <p className="mb-2 text-sm text-gray-500">No bookmarks found.</p>
-          <a
+          <p className="mb-2 ">No bookmarks found.</p>
+          {/* <a
             href={`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`}
             target="_blank"
             className="btn btn-primary"
           >
             Search Google for {searchQuery}
-          </a>
+          </a> */}
         </div>
       )}
 
