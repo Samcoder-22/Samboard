@@ -44,12 +44,12 @@ export default function SearchBar() {
       />
       {searchQuery ? (
         <XMarkIcon
-          className="h-6 w-6 absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+          className="h-6 w-6 absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
           onClick={handleClear}
         />
       ) : (
         <MagnifyingGlassIcon
-          className="h-6 w-6 absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+          className="h-6 w-6 absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none"
         />
       )}
     </div>

@@ -28,13 +28,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     <div className="modal modal-open glass">
       <div className="modal-box max-w-4xl w-full h-[70vh] flex p-0 glass">
         {/* Sidebar */}
-        <div className="w-1/4 border-r border-base-300 bg-base-200 p-4 glass">
+        <div className="w-1/4 border-r p-4 glass">
           <ul className="menu space-y-1">
             {sections.map((section) => (
               <li key={section.id}>
                 <button
                   className={`w-full text-left p-2 rounded ${
-                    active === section.id ? "bg-base-300 font-semibold" : ""
+                    active === section.id ? " font-semibold" : ""
                   }`}
                   onClick={() => setActive(section.id)}
                 >

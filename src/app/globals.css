@@ -1,99 +1,89 @@
 @import "tailwindcss";
-/* @import "tailwindcss"; */
 @plugin "daisyui";
 
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
-} */
-
-/* @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-} */
-
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
-
-/* body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
-
-
-/* @import "tailwindcss";
-@import "daisyui"; */
-
 /* ---------------------------
-   Base CSS variables
+   Base (Light theme)
 ---------------------------- */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --text-primary: #171717;
+  --text-secondary: #555555;
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --card-border: rgba(0, 0, 0, 0.1);
+  --input-bg: rgba(255, 255, 255, 0.9);
+
   --glass: rgba(255, 255, 255, 0.6);
   --glass-border: rgba(0, 0, 0, 0.1);
-  --accent: #3b82f6; /* blue accent example */
+  --accent: #3b82f6;
 }
 
 /* ---------------------------
-   Dark mode variables
+   Dark theme
 ---------------------------- */
 [data-theme="dark"] {
   --background: #0a0a0a;
   --foreground: #ededed;
+
+  --text-primary: #ededed;
+  --text-secondary: #aaaaaa;
+  --card-bg: rgba(20, 20, 20, 0.7);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --input-bg: rgba(30, 30, 30, 0.8);
+
   --glass: rgba(0, 0, 0, 0.6);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --accent: #60a5fa; /* slightly lighter accent for dark */
+  --accent: #60a5fa;
 }
 
 /* ---------------------------
-   Dynamic mode (placeholder)
-   Will be updated via JS
----------------------------- */
-[data-theme="dynamic"] {
-  --background: #ffffff; /* placeholder, JS will update */
-  --foreground: #171717; /* placeholder */
-  --glass: rgba(255,255,255,0.6);
-  --glass-border: rgba(0,0,0,0.1);
-}
-
-/* ---------------------------
-   Tailwind theme integration
+   Tailwind integration
 ---------------------------- */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-glass: var(--glass);
-  --color-glass-border: var(--glass-border);
   --color-accent: var(--accent);
 }
 
 /* ---------------------------
-   Global body style
+   Global base
 ---------------------------- */
 body {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--text-primary);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
 /* ---------------------------
-   Example reusable glass class
+   Elements
 ---------------------------- */
-/* globals.css */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+}
+
+p, span, label {
+  color: var(--text-secondary);
+}
+
+input, textarea, .input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--card-border);
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
 .glass {
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px); /* Safari */
-  background-color: rgba(255, 255, 255, 0.15); /* constant opacity */
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2); /* subtle border */
+  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  transition: background 0.4s ease, border-color 0.4s ease;
 }
 
+.modal-box {
+  background-color: var(--background);
+  color: var(--foreground);
+  border-color: var(--glass-border);
+}
