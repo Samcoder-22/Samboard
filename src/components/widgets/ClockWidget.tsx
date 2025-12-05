@@ -45,7 +45,7 @@ export default function ClockWidget() {
   return (
     <div className="flex items-center justify-center">
       <span
-        className={`${outfit.className} text-6xl md:text-8xl tabular-nums drop-shadow-[0_0_12px_rgba(255,255,255,0.15)]`}
+        className={`${outfit.className} text-7xl md:text-8xl tabular-nums drop-shadow-[0_0_12px_rgba(255,255,255,0.15)]`}
       >
         {time}
       </span>

@@ -21,11 +21,21 @@ export default function SearchBar() {
     setSearchQuery("");
   };
 
-  useEffect(() => {
-    // Focus input when page first loads
-    inputRef.current?.focus();
-  }, []);
+useEffect(() => {
+  const tryFocus = () => {
+    if (document.hasFocus()) {
+      inputRef.current?.focus();
+    } else {
+      window.focus?.();
+      setTimeout(() => inputRef.current?.focus(), 150);
+    }
+  };
 
+  // try once, and again when window becomes focused
+  tryFocus();
+  window.addEventListener("focus", tryFocus);
+  return () => window.removeEventListener("focus", tryFocus);
+}, []);
 
   const showPlaceholder = !isFocused && searchQuery === "";
 
