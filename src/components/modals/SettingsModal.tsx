@@ -1,5 +1,6 @@
 "use client";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { LockClosedIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 interface SettingsModalProps {
@@ -17,16 +18,16 @@ const sections: SettingsSection[] = [
   { id: "bookmarks", label: "Bookmarks" },
 ];
 
-
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
-    const { theme, toggleTheme } = useSettingsStore();
+  const { theme, toggleTheme, setTheme } = useSettingsStore();
   const [active, setActive] = useState<string>(sections[0].id);
 
   if (!isOpen) return null;
 
   return (
     <div className="modal modal-open glass">
-      <div className="modal-box max-w-4xl w-full h-[70vh] flex p-0 glass">
+      
+      <div className="modal-box max-w-4xl w-full h-[70vh] flex p-0 glass rounded-3xl">
         {/* Sidebar */}
         <div className="w-1/4 border-r p-4 glass">
           <ul className="menu space-y-1">
@@ -45,6 +46,12 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           </ul>
         </div>
 
+<div className="modal-action absolute right-6 top-0">
+        <div className="size-6 cursor-pointer" onClick={onClose}>
+          <XMarkIcon className="text-white-500"/>
+        </div>
+      </div>
+
         {/* Content */}
         <div className="flex-1 p-6 overflow-y-auto">
           {active === "appearance" && (
@@ -52,19 +59,29 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <h2 className="text-xl font-bold mb-4">Appearance</h2>
               <div className="space-y-6">
                 {/* Wallpaper mode options */}
-                <div>
+                {/* <div>
                   <h3 className="font-semibold mb-2">Wallpaper Mode</h3>
                   <div className="flex gap-3">
                     <button className="btn btn-sm">Plain</button>
                     <button className="btn btn-sm">Dynamic</button>
                     <button className="btn btn-sm">Image</button>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Dark mode toggle */}
                 <div>
-                  <h3 className="font-semibold mb-2" >Dark Mode</h3>
-                  <input type="checkbox" className="toggle" onClick={toggleTheme} />
+                  <h3 className="font-semibold mb-2">Dark Mode</h3>
+                  <input
+                    type="checkbox"
+                    className="toggle"
+                    checked={theme === "dark"}
+                    aria-label="Toggle dark mode"
+                    onChange={(e) => {
+                      // keep toggleTheme for convenience, or use setTheme directly:
+                      if (e.target.checked) setTheme("dark");
+                      else setTheme("light");
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -83,11 +100,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       </div>
 
       {/* Modal action */}
-      <div className="modal-action absolute right-6 bottom-4">
-        <button className="btn" onClick={onClose}>
-          Close
-        </button>
-      </div>
+      
     </div>
   );
 }

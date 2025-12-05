@@ -13,26 +13,25 @@ export default function HomePage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isSettingsModalOpen, setSettingsModalOpen] = useState(false);
-const dropdownRef = useRef<HTMLDetailsElement>(null);
+  const dropdownRef = useRef<HTMLDetailsElement>(null);
 
-//   useEffect(() => {
-//   updateDynamicWallpaper();
+  //   useEffect(() => {
+  //   updateDynamicWallpaper();
 
-//   const interval = setInterval(() => {
-//     updateDynamicWallpaper();
-//   }, 60 * 1000); 
+  //   const interval = setInterval(() => {
+  //     updateDynamicWallpaper();
+  //   }, 60 * 1000);
 
-//   return () => clearInterval(interval);
-// }, []); 
+  //   return () => clearInterval(interval);
+  // }, []);
 
-useEffect(() => {
-  const saved = localStorage.getItem("theme") as "light" | "dark" | null;
-  const theme = saved ?? "light";
-  document.documentElement.setAttribute("data-theme", theme);
-}, []);
+  useEffect(() => {
+    const saved = localStorage.getItem("theme") as "light" | "dark" | null;
+    const theme = saved ?? "light";
+    document.documentElement.setAttribute("data-theme", theme);
+  }, []);
 
-
-useEffect(() => {
+  useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
         dropdownRef.current &&
@@ -45,6 +44,17 @@ useEffect(() => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
+  function Greeting({ name }: { name?: string }) {
+  const hour = new Date().getHours();
+  const greet =
+    hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  return (
+    <div className="mb-2 text-sm opacity-80 select-none">
+      {greet}{name ? `, ${name}` : ""}.
+    </div>
+  );
+}
+
   return (
     <div className="p-6 h-[100dvh] flex flex-col">
       {/* Header */}
@@ -56,6 +66,7 @@ useEffect(() => {
           <summary className="btn btn-ghost btn-circle m-1">
             <EllipsisHorizontalIcon className="h-6 w-6" />
           </summary>
+          
           <ul className="menu dropdown-content rounded-box z-10 w-40 p-2 shadow">
             <li>
               <button onClick={() => setModalOpen(true)}>Add Bookmark</button>
@@ -77,6 +88,7 @@ useEffect(() => {
       <div className="flex flex-col items-center justify-center h-1/3 md:h-2/5 md:mb-12 md:justify-end gap-12">
         {/* Search */}
         <ClockWidget />
+        {/* <Greeting name="Samcoder" /> */}
         <div className="hidden md:block w-full max-w-xl">
           <SearchBar />
         </div>
@@ -101,8 +113,8 @@ useEffect(() => {
       />
       <SettingsModal
         isOpen={isSettingsModalOpen}
-        onClose={()=> setSettingsModalOpen(false)}
-        />
+        onClose={() => setSettingsModalOpen(false)}
+      />
     </div>
   );
 }

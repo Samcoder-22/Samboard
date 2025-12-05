@@ -74,12 +74,20 @@ input, textarea, .input {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* replace the background-image in your .glass rule in globals.css */
 .glass {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  transition: background 0.4s ease, border-color 0.4s ease;
+  background-image:
+    linear-gradient(135deg,
+      oklch(100% 0 0 / var(--glass-opacity, 30%)) 0%,
+      oklch(0% 0 0 / 0%) 100%),
+    linear-gradient(var(--glass-reflect-degree, 100deg),
+      oklch(100% 0 0 / var(--glass-reflect-opacity, 5%)) 0%,
+      oklch(100% 0 0 / calc(var(--glass-reflect-opacity, 5%) * 0.6)) 18%,
+      oklch(0% 0 0 / 0%) 40%);
+  background-repeat: no-repeat;
+  background-position: 0 0, 0 0;
+  background-size: cover, cover;
+  background-clip: padding-box; /* ensure gradients don't paint outside the box area */
 }
 
 .modal-box {
