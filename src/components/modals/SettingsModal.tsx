@@ -1,4 +1,6 @@
 "use client";
+import { triggerExportDownload } from "@/lib/bookmarkIO";
+import { useBookmarksStore } from "@/stores/bookmarkStore";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { LockClosedIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
@@ -21,6 +23,8 @@ const sections: SettingsSection[] = [
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const { theme, toggleTheme, setTheme } = useSettingsStore();
   const [active, setActive] = useState<string>(sections[0].id);
+
+  const bookmarks = useBookmarksStore((s) => s.bookmarks);
 
   if (!isOpen) return null;
 
@@ -90,9 +94,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           {active === "bookmarks" && (
             <div>
               <h2 className="text-xl font-bold mb-4">Bookmarks</h2>
-              <div className="space-y-4">
-                <button className="btn btn-outline">Export Bookmarks</button>
-                <button className="btn btn-outline">Import Bookmarks</button>
+              <div className="space-x-4">
+                <button className="btn btn-outline" onClick={() => triggerExportDownload(bookmarks)}>Export Bookmarks</button>
+                {/* <button className="btn btn-outline">Import Bookmarks</button> */}
               </div>
             </div>
           )}

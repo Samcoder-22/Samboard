@@ -96,7 +96,7 @@ useEffect(() => {
       </div>
 
       {/* Bookmarks */}
-      <div className="flex-1 overflow-y-auto md:w-[80vw] mx-auto">
+      <div className="flex-1 overflow-y-auto md:w-[50vw] mx-auto">
         <BookmarkGrid rows={3} cols={4} />
       </div>
       <div className="md:hidden block w-full max-w-xl">
