@@ -66,8 +66,8 @@ export interface Bookmark {
   id: string;
   title: string;
   url: string;
-  icon: string;
-  createdAt?: number; // optional, used for "recent" sort
+  icon?: string;
+  createdAt?: number;
 }
 
 type SortBy = "manual" | "title" | "recent";
@@ -80,17 +80,16 @@ interface BookmarkState {
   removeBookmark: (id: string) => void;
   moveBookmark: (id: string, direction: "up" | "down") => void;
 
-  // Search + sort
   searchQuery: string;
   setSearchQuery: (q: string) => void;
 
   sortBy: SortBy;
   setSortBy: (s: SortBy) => void;
 
-  // Derived selectors
   getFilteredBookmarks: () => Bookmark[];
-  getPagedBookmarks?: (page: number, pageSize: number) => Bookmark[];
+  getPagedBookmarks: (page: number, pageSize: number) => Bookmark[];
 }
+
 
 // utils
 const toLower = (v: string | undefined | null) => (v ?? "").toLowerCase();

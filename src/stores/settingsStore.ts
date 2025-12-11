@@ -1,3 +1,4 @@
+// stores/settingsStore.ts
 import { create } from "zustand";
 
 type Theme = "light" | "dark";
@@ -9,12 +10,15 @@ interface SettingsState {
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
-  theme: (typeof window !== "undefined" && (localStorage.getItem("theme") as Theme)) || "light",
+  theme: "light",
 
-  setTheme: (t) => {
+  setTheme: (t: Theme) => {
     set({ theme: t });
-    localStorage.setItem("theme", t);
-
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("theme", t);
+      } catch {}
+    }
     if (typeof document !== "undefined") {
       document.documentElement.setAttribute("data-theme", t);
     }

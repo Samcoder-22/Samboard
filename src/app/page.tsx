@@ -7,6 +7,7 @@ import SettingsModal from "@/components/modals/SettingsModal";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import SearchBar from "@/components/widgets/Searchbar";
 import ClockWidget from "@/components/widgets/ClockWidget";
+import { useSettingsStore } from "@/stores/settingsStore";
 // import { updateDynamicWallpaper } from "@/lib/utils/updateDynamicWallpaper";
 
 export default function HomePage() {
@@ -24,12 +25,6 @@ export default function HomePage() {
 
   //   return () => clearInterval(interval);
   // }, []);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("theme") as "light" | "dark" | null;
-    const theme = saved ?? "light";
-    document.documentElement.setAttribute("data-theme", theme);
-  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -54,6 +49,12 @@ export default function HomePage() {
     </div>
   );
 }
+
+useEffect(() => {
+  if (typeof window === "undefined") return;
+  const saved = (localStorage.getItem("theme") as "light" | "dark") ?? "light";
+  useSettingsStore.getState().setTheme(saved);
+}, []);
 
   return (
     <div className="p-6 h-[100dvh] flex flex-col">
@@ -95,7 +96,7 @@ export default function HomePage() {
       </div>
 
       {/* Bookmarks */}
-      <div className="flex-1 overflow-y-auto md:w-[80vw] mx-auto">
+      <div className="flex-1 overflow-y-auto md:w-[50vw] mx-auto">
         <BookmarkGrid rows={3} cols={4} />
       </div>
       <div className="md:hidden block w-full max-w-xl">
