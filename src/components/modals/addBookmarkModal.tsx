@@ -91,7 +91,10 @@ interface AddBookmarkModalProps {
   onClose: () => void;
 }
 
-export default function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalProps) {
+export default function AddBookmarkModal({
+  isOpen,
+  onClose,
+}: AddBookmarkModalProps) {
   const addBookmark = useBookmarksStore((s) => s.addBookmark);
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -105,6 +108,13 @@ export default function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalPr
 
     // ensure https:// is added
     const normalizedUrl = url.startsWith("http") ? url : `https://${url}`;
+    const hostname = (() => {
+      try {
+        return new URL(normalizedUrl).hostname;
+      } catch {
+        return "";
+      }
+    })();
 
     // if title input is blank, fallback from URL
     const fallbackTitle = (() => {
@@ -122,7 +132,9 @@ export default function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalPr
       id: Date.now().toString(),
       title: finalTitle,
       url: normalizedUrl,
-      icon: `https://www.google.com/s2/favicons?sz=64&domain=${normalizedUrl}`,
+      icon: hostname
+        ? `https://www.google.com/s2/favicons?sz=64&domain=${hostname}`
+        : "",
     });
 
     setTitle("");
@@ -151,8 +163,12 @@ export default function AddBookmarkModal({ isOpen, onClose }: AddBookmarkModalPr
             required
           />
           <div className="modal-action">
-            <button type="submit" className="btn btn-primary">Save</button>
-            <button type="button" className="btn" onClick={onClose}>Cancel</button>
+            <button type="submit" className="btn btn-primary">
+              Save
+            </button>
+            <button type="button" className="btn" onClick={onClose}>
+              Cancel
+            </button>
           </div>
         </form>
       </div>
