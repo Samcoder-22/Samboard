@@ -27,8 +27,7 @@ Samboard is a cross-device, privacy-centric homepage designed to replace noisy b
 ### Keyboard-First Search
 
 * Global search bar filters bookmarks in real time
-* Enter key executes a Google search when no bookmark matches
-* Auto-focus on load for rapid navigation
+* Auto-focus on load for rapid navigation (in progress)
 
 ### Modular Widget System
 
