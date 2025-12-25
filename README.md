@@ -1,5 +1,7 @@
 <img width="1599" height="899" alt="image (82)" src="https://github.com/user-attachments/assets/e5da7933-5e9c-40e2-8d40-7a2e380cc652" />
 
+live: https://samboard.vercel.app/
+
 # Samboard — Privacy-First Custom Homepage
 
 A personal, offline-first dashboard built for speed, intentionality, and user autonomy.
