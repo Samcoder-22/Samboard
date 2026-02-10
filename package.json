@@ -11,7 +11,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "daisyui": "^5.0.50",
-    "next": "15.4.8",
+    "next": "15.4.10",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "zustand": "^5.0.7"
