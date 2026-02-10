@@ -143,31 +143,52 @@ export default function AddBookmarkModal({
   };
 
   return (
-    <div className="modal modal-open">
-      <div className="modal-box">
-        <h2 className="text-lg font-bold mb-4">Add Bookmark</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Title (optional)"
-            className="input input-bordered w-full"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="URL"
-            className="input input-bordered w-full"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            required
-          />
-          <div className="modal-action">
-            <button type="submit" className="btn btn-primary">
-              Save
-            </button>
-            <button type="button" className="btn" onClick={onClose}>
+    <div className="modal modal-open bg-black/50 backdrop-blur-sm">
+      <div className="modal-box relative max-w-md p-6 rounded-2xl shadow-xl">
+        <button
+          onClick={onClose}
+          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        >
+          ✕
+        </button>
+
+        <h3 className="font-bold text-xl mb-6 text-center">Add New Bookmark</h3>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">URL</span>
+            </label>
+            <input
+              type="text"
+              placeholder="https://example.com"
+              className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              required
+              autoFocus
+            />
+          </div>
+
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Title <span className="text-xs opacity-60">(Optional)</span></span>
+            </label>
+            <input
+              type="text"
+              placeholder="My Awesome Site"
+              className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+
+          <div className="modal-action mt-6 flex justify-end gap-2">
+            <button type="button" className="btn btn-ghost" onClick={onClose}>
               Cancel
+            </button>
+            <button type="submit" className="btn btn-primary px-8">
+              Save Bookmark
             </button>
           </div>
         </form>
