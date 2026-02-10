@@ -120,7 +120,9 @@ export default function AddBookmarkModal({
     const fallbackTitle = (() => {
       try {
         const { hostname } = new URL(normalizedUrl);
-        return hostname.replace("www.", "").split(".")[0];
+        const nameData = hostname.replace("www.", "").split(".")[0];
+        // Capitalize first letter
+        return nameData.charAt(0).toUpperCase() + nameData.slice(1);
       } catch {
         return "Untitled";
       }
