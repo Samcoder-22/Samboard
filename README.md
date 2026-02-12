@@ -1,64 +1,64 @@
-<img width="1599" height="899" alt="image (82)" src="https://github.com/user-attachments/assets/e5da7933-5e9c-40e2-8d40-7a2e380cc652" />
-
-live: https://samboard.vercel.app/
-
 # Samboard — Privacy-First Custom Homepage
 
-A personal, offline-first dashboard built for speed, intentionality, and user autonomy.
+Samboard is an offline-first browser homepage built with Next.js and TypeScript.  
+It replaces default start pages with a fast, minimal, and fully local dashboard.
 
-Samboard is a cross-device, privacy-centric homepage designed to replace noisy browser start pages with a clean, customizable, and distraction-free interface. Built with Next.js, TypeScript, Zustand, Tailwind CSS, and DaisyUI, it serves as a fast daily-driver tool that adapts to your workflow without tracking or external dependencies.
+All data is stored in the browser. No backend, no analytics, no external services.
+
+Live: https://samboard.vercel.app/
 
 ---
 
 ## Features
 
-### Privacy-First Architecture
+### Offline-First Architecture
 
-* Fully offline; no backend services, analytics, or trackers
-* All data stored locally using browser storage
-* Cross-device portability through bookmark export/import
+- Fully client-side application
+- No backend services or network calls
+- All data persisted using localStorage
 
-### Smart Bookmark Manager
+### Bookmark Management
 
-* Add, edit, delete, and reorder bookmarks
-* Automatic favicon fetching
-* Instant filtering and smart search
-* Paginated grid layout for organized navigation
-* Supports keyboard-driven workflows
+- Add, edit, delete, and reorder bookmarks
+- Automatic favicon fetching
+- Instant search and filtering
+- Paginated grid layout (handles 100+ bookmarks)
+- Keyboard-friendly navigation
 
-### Keyboard-First Search
+### Theming
 
-* Global search bar filters bookmarks in real time
-* Auto-focus on load for rapid navigation (in progress)
+- Light and dark themes
+- Theme preference persisted locally
 
-### Modular Widget System
+### Widgets
 
-* Clean digital clock widget (HH:MM, 24-hour format)
-* Typography tuned for clarity with tabular numerals
-* Architecture ready for additional widgets
+- Digital clock (24-hour format)
+- Modular structure for additional widgets
 
-### Custom Theming
+### Data Portability
 
-* Light and dark themes using CSS variables
-* Theme persisted locally through user preference
-* Appearance settings structured for future wallpaper modes
+- JSON-based export/import structure (planned)
 
-### Export/Import Ready
+---
 
-* JSON-based data portability (in progress)
-* Enables consistent state across multiple devices
+## Engineering Decisions
+
+- Used **Zustand** for predictable, centralized state management without prop drilling
+- Separated UI components from state logic for maintainability
+- Implemented pagination to prevent performance degradation with large bookmark sets
+- Designed stores to remain serializable for future export/import support
+- Avoided external APIs to maintain zero-dependency architecture
 
 ---
 
 ## Tech Stack
 
 | Layer            | Tools                                       |
-| ---------------- | ------------------------------------------- |
+|------------------|---------------------------------------------|
 | Framework        | Next.js (App Router), TypeScript            |
-| Styling          | Tailwind CSS, DaisyUI, custom CSS variables |
+| Styling          | Tailwind CSS, DaisyUI, CSS variables        |
 | State Management | Zustand                                     |
 | Icons            | Heroicons                                   |
-| Fonts            | Inter / Geist                               |
 | Storage          | localStorage                                |
 
 ---
@@ -90,21 +90,6 @@ src/
 
 ---
 
-## Origin and Purpose
-
-Samboard is designed around the idea of Ikigai, the intersection of what you love, what you are good at, what the world needs, and what provides value.
-
-Typical browser homepages are filled with ads, recommendations, and noise. Samboard takes the opposite approach:
-
-* No news feeds
-* No tracking
-* No suggestions
-* No algorithmic clutter
-
-The goal is a fast, intentional, personal homepage that prioritizes privacy and user autonomy. It acts as a stable alternative to fragile device-based customizations, ensuring your preferred UI persists across environments.
-
----
-
 ## Running Locally
 
 ```bash
@@ -122,36 +107,15 @@ http://localhost:3000
 
 ---
 
-## Core Principles
-
-### Minimalism
-
-Interfaces should be intentional; unnecessary elements are avoided.
-
-### Performance
-
-No network calls, low re-render overhead, and instant interactions.
-
-### Privacy
-
-A homepage should belong to the user, not third-party systems.
-
-### Customizability
-
-The foundation supports expansion through widgets, appearance themes, and power-user features.
-
----
-
 ## Roadmap
 
-* JSON export and import
-* Global command palette (Ctrl + K)
-* Keyboard shortcuts throughout the interface
-* Dynamic wallpapers (plain, image, gradient, time-based)
-* Additional widgets
+- JSON export and import
+- Additional widgets
+- Dynamic wallpapers
+- Extended keyboard shortcuts
 
 ---
 
 ## License
 
-MIT License.
+MIT License
