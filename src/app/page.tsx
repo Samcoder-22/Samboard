@@ -4,7 +4,7 @@ import BookmarkGrid from "@/components/grid/BookmarkGrid";
 import AddBookmarkModal from "@/components/modals/addBookmarkModal";
 import EditBookmarkModal from "@/components/modals/EditBookmarkModal";
 import SettingsModal from "@/components/modals/SettingsModal";
-import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
+import { EllipsisHorizontalIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import SearchBar from "@/components/widgets/Searchbar";
 import ClockWidget from "@/components/widgets/ClockWidget";
 import { useSettingsStore } from "@/stores/settingsStore";
@@ -14,6 +14,7 @@ export default function HomePage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isSettingsModalOpen, setSettingsModalOpen] = useState(false);
+  const { isIncognito, toggleIncognito } = useSettingsStore();
   const dropdownRef = useRef<HTMLDetailsElement>(null);
 
   //   useEffect(() => {
@@ -40,21 +41,24 @@ export default function HomePage() {
   }, []);
 
   function Greeting({ name }: { name?: string }) {
-  const hour = new Date().getHours();
-  const greet =
-    hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-  return (
-    <div className="mb-2 text-sm opacity-80 select-none">
-      {greet}{name ? `, ${name}` : ""}.
-    </div>
-  );
-}
+    const hour = new Date().getHours();
+    const greet =
+      hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+    return (
+      <div className="mb-2 text-sm opacity-80 select-none">
+        {greet}{name ? `, ${name}` : ""}.
+      </div>
+    );
+  }
 
-useEffect(() => {
-  if (typeof window === "undefined") return;
-  const saved = (localStorage.getItem("theme") as "light" | "dark") ?? "light";
-  useSettingsStore.getState().setTheme(saved);
-}, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const savedTheme = (localStorage.getItem("theme") as "light" | "dark") ?? "light";
+    useSettingsStore.getState().setTheme(savedTheme);
+
+    const savedIncognito = localStorage.getItem("incognito") === "true";
+    useSettingsStore.getState().setIncognito(savedIncognito);
+  }, []);
 
   return (
     <div className="p-6 h-[100dvh] flex flex-col">
@@ -62,28 +66,40 @@ useEffect(() => {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Samboard</h1>
 
-        {/* Dropdown */}
-        <details ref={dropdownRef} className="dropdown dropdown-end">
-          <summary className="btn btn-ghost btn-circle m-1">
-            <EllipsisHorizontalIcon className="h-6 w-6" />
-          </summary>
-          
-          <ul className="menu dropdown-content rounded-box z-10 w-40 p-2 shadow">
-            <li>
-              <button onClick={() => setModalOpen(true)}>Add Bookmark</button>
-            </li>
-            <li>
-              <button onClick={() => setEditModalOpen(true)}>
-                Edit Bookmarks
-              </button>
-            </li>
-            <li>
-              <button onClick={() => setSettingsModalOpen(true)}>
-                Settings
-              </button>
-            </li>
-          </ul>
-        </details>
+        {/* Header Actions */}
+        <div className="flex items-center gap-2">
+          {/* Incognito Toggle */}
+          <button
+            className={`btn btn-ghost btn-circle m-1 ${isIncognito ? "text-primary bg-primary/10" : "text-base-content/50"}`}
+            onClick={toggleIncognito}
+            title={isIncognito ? "Incognito Mode is ON" : "Incognito Mode is OFF"}
+          >
+            <EyeSlashIcon className="h-6 w-6" />
+          </button>
+
+          {/* Dropdown */}
+          <details ref={dropdownRef} className="dropdown dropdown-end">
+            <summary className="btn btn-ghost btn-circle m-1">
+              <EllipsisHorizontalIcon className="h-6 w-6" />
+            </summary>
+
+            <ul className="menu dropdown-content rounded-box z-10 w-40 p-2 shadow">
+              <li>
+                <button onClick={() => setModalOpen(true)}>Add Bookmark</button>
+              </li>
+              <li>
+                <button onClick={() => setEditModalOpen(true)}>
+                  Edit Bookmarks
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setSettingsModalOpen(true)}>
+                  Settings
+                </button>
+              </li>
+            </ul>
+          </details>
+        </div>
       </div>
 
       <div className="flex flex-col items-center justify-center h-1/3 md:h-2/5 md:mb-12 md:justify-end gap-12">
