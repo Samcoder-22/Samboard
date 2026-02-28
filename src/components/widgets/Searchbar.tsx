@@ -63,6 +63,11 @@ export default function SearchBar() {
         if (!isIncognito) {
           addSearchRecord(searchQuery);
         }
+        if(searchQuery.trim().endsWith(".com")) {
+          const url = searchQuery.trim();
+          window.location.href = `https://${url}`;
+          return;
+        }
         const encoded = encodeURIComponent(searchQuery.trim());
         window.location.href = `https://www.google.com/search?q=${encoded}`;
       }

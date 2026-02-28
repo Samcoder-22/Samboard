@@ -90,6 +90,21 @@ input, textarea, .input {
   background-clip: padding-box; /* ensure gradients don't paint outside the box area */
 }
 
+.glass-card {
+  background-image:
+    linear-gradient(135deg,
+      oklch(100% 0 0 / var(--glass-opacity, 2%)) 0%,
+      oklch(0% 0 0 / 0%) 100%);
+    /* linear-gradient(var(--glass-reflect-degree, 100deg),
+      oklch(100% 0 0 / var(--glass-reflect-opacity, 5%)) 0%,
+      oklch(100% 0 0 / calc(var(--glass-reflect-opacity, 5%) * 0.6)) 18%,
+      oklch(0% 0 0 / 0%) 40%); */
+  background-repeat: no-repeat;
+  background-position: 0 0, 0 0;
+  background-size: cover, cover;
+  background-clip: padding-box; /* ensure gradients don't paint outside the box area */
+}
+
 .modal-box {
   background-color: var(--background);
   color: var(--foreground);
