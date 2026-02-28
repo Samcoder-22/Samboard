@@ -41,26 +41,57 @@
    Dynamic theme
 ---------------------------- */
 [data-dynamic-theme="true"] {
-  --background: var(--dynamic-bg);
+  --background: linear-gradient(to bottom, var(--dynamic-bg-top), var(--dynamic-bg-bottom));
   --foreground: var(--dynamic-fg);
 
   --text-primary: var(--dynamic-fg);
   --text-secondary: color-mix(in srgb, var(--dynamic-fg) 70%, transparent);
-  --card-bg: color-mix(in srgb, var(--dynamic-bg) 70%, transparent);
-  --card-border: color-mix(in srgb, var(--dynamic-fg) 10%, transparent);
-  --input-bg: color-mix(in srgb, var(--dynamic-bg) 80%, var(--dynamic-fg) 10%);
 
-  --glass: color-mix(in srgb, var(--dynamic-bg) 60%, transparent);
+  /* Modals/cards use the bottom color mixed with transparent, no gradient */
+  --card-bg: color-mix(in srgb, var(--dynamic-bg-bottom) 70%, transparent);
+  --card-border: color-mix(in srgb, var(--dynamic-fg) 10%, transparent);
+  --input-bg: color-mix(in srgb, var(--dynamic-bg-bottom) 80%, var(--dynamic-fg) 10%);
+
+  --glass: color-mix(in srgb, var(--dynamic-bg-bottom) 60%, transparent);
   --glass-border: color-mix(in srgb, var(--dynamic-fg) 10%, transparent);
+
+  /* DaisyUI uses specific formats for primary color. We can inject the hex value directly 
+     into the components if the vars don't work, but --p expects oklch space separated values
+     Using a fallback class instead for direct overrides */
+  --p: var(--dynamic-accent);
+  --pf: var(--dynamic-accent);
 }
 
-/* ---------------------------
-   Tailwind integration
----------------------------- */
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
+/* Base override for daisyUI root variables when dynamic theme is active */
+:root[data-dynamic-theme="true"] {
+  --bc: 215 28% 17%;
+  /* We will force elements that use primary to use our dynamic css variable */
+}
+
+[data-dynamic-theme="true"] .bg-primary {
+  background-color: var(--dynamic-accent) !important;
+}
+
+[data-dynamic-theme="true"] .text-primary {
+  color: var(--dynamic-accent) !important;
+}
+
+[data-dynamic-theme="true"] .border-primary {
+  border-color: var(--dynamic-accent) !important;
+}
+
+[data-dynamic-theme="true"] .text-primary-content {
+  color: var(--dynamic-fg) !important;
+}
+
+[data-dynamic-theme="true"] .toggle-secondary {
+  --tglbg: var(--dynamic-accent);
+  background-color: var(--dynamic-accent);
+}
+
+[data-dynamic-theme="true"] .toggle-secondary:checked {
+  background-color: var(--dynamic-accent);
+  border-color: var(--dynamic-accent);
 }
 
 /* ---------------------------
@@ -68,6 +99,7 @@
 ---------------------------- */
 body {
   background: var(--background);
+  background-attachment: fixed;
   color: var(--text-primary);
   font-family: Arial, Helvetica, sans-serif;
   transition: background 0.4s ease, color 0.4s ease;
@@ -137,4 +169,5 @@ textarea,
   background-color: var(--background);
   color: var(--foreground);
   border-color: var(--glass-border);
+  
 }

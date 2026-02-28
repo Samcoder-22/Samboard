@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 import { useSettingsStore } from "@/stores/settingsStore";
 
-// Example realistic sky color progression
-// You can expand this array to have as many colors as you want.
-// The time gap between colors is automatically calculated: 24h / array.length
-const DEFAULT_SKY_COLORS = [
-    "#081023", // Midnight
-    "#0b1d3a", // Late Night
-    "#1a2a42", // Pre-dawn
-    "#28385e", // Dawn
-    "#d77b5d", // Sunrise
-    "#edae7a", // Early Morning
-    "#6ab1e7", // Morning
-    "#4a90e2", // Noon
-    "#2b73c4", // Afternoon
-    "#4a6ca3", // Late Afternoon
-    "#e28e46", // Sunset
-    "#a35a4d", // Dusk
-    "#3a3b5a", // Evening
-    "#1f253e", // Night
+export type SkyColorConfig = {
+    top: string;
+    bottom: string;
+    accent: string;
+};
+
+// Realistic sky color pairs over a 24h cycle
+const DEFAULT_SKY_COLORS: SkyColorConfig[] = [
+    { top: "#030B1C", bottom: "#081023", accent: "#3B82F6" }, // Midnight (Deep blues)
+    { top: "#081023", bottom: "#0B1D3A", accent: "#3B82F6" }, // Late Night
+    { top: "#0B1D3A", bottom: "#1A2A42", accent: "#60A5FA" }, // Pre-dawn
+    { top: "#1A2A42", bottom: "#28385E", accent: "#60A5FA" }, // Dawn
+    { top: "#28385E", bottom: "#D77B5D", accent: "#F59E0B" }, // Sunrise (Blue to Orange)
+    { top: "#4A6CA3", bottom: "#EDAE7A", accent: "#F59E0B" }, // Early Morning
+    { top: "#3B82F6", bottom: "#6AB1E7", accent: "#3B82F6" }, // Morning
+    { top: "#2563EB", bottom: "#4A90E2", accent: "#2563EB" }, // Noon
+    { top: "#1D4ED8", bottom: "#2B73C4", accent: "#2563EB" }, // Afternoon
+    { top: "#1E3A8A", bottom: "#4A6CA3", accent: "#3B82F6" }, // Late Afternoon
+    { top: "#28385E", bottom: "#E28E46", accent: "#F97316" }, // Sunset (Dark blue to warm orange)
+    { top: "#1A2A42", bottom: "#A35A4D", accent: "#EF4444" }, // Dusk
+    { top: "#0B1D3A", bottom: "#3A3B5E", accent: "#8B5CF6" }, // Evening
+    { top: "#081023", bottom: "#1F253E", accent: "#6366F1" }, // Night
 ];
 
 // Calculate relative luminance.
@@ -43,21 +47,23 @@ function getContrastColor(hexBg: string) {
 
 export function useDynamicTheme(skyColors = DEFAULT_SKY_COLORS) {
     const isDynamicTheme = useSettingsStore((s) => s.isDynamicTheme);
-    const [currentColor, setCurrentColor] = useState("");
+    const [currentConfig, setCurrentConfig] = useState<SkyColorConfig | null>(null);
 
     useEffect(() => {
         if (typeof window === "undefined" || typeof document === "undefined") return;
 
         if (!isDynamicTheme) {
             document.documentElement.removeAttribute("data-dynamic-theme");
-            document.documentElement.style.removeProperty("--dynamic-bg");
+            document.documentElement.style.removeProperty("--dynamic-bg-top");
+            document.documentElement.style.removeProperty("--dynamic-bg-bottom");
+            document.documentElement.style.removeProperty("--dynamic-accent");
             document.documentElement.style.removeProperty("--dynamic-fg");
-            setCurrentColor("");
+            setCurrentConfig(null);
             return;
         }
 
         const updateDynamicColor = () => {
-            const getCurrentSkyColor = (colors: string[]) => {
+            const getCurrentSkyConfig = (colors: SkyColorConfig[]) => {
                 const now = new Date();
                 const totalMinutes = now.getHours() * 60 + now.getMinutes();
                 const minutesPerColor = (24 * 60) / colors.length;
@@ -68,13 +74,15 @@ export function useDynamicTheme(skyColors = DEFAULT_SKY_COLORS) {
                 return colors[index];
             };
 
-            const bgColor = getCurrentSkyColor(skyColors);
-            const fgColor = getContrastColor(bgColor);
+            const config = getCurrentSkyConfig(skyColors);
+            const fgColor = getContrastColor(config.top);
 
             document.documentElement.setAttribute("data-dynamic-theme", "true");
-            document.documentElement.style.setProperty("--dynamic-bg", bgColor);
+            document.documentElement.style.setProperty("--dynamic-bg-top", config.top);
+            document.documentElement.style.setProperty("--dynamic-bg-bottom", config.bottom);
+            document.documentElement.style.setProperty("--dynamic-accent", config.accent);
             document.documentElement.style.setProperty("--dynamic-fg", fgColor);
-            setCurrentColor(bgColor);
+            setCurrentConfig(config);
         };
 
         // Run initially
@@ -86,5 +94,5 @@ export function useDynamicTheme(skyColors = DEFAULT_SKY_COLORS) {
         return () => clearInterval(interval);
     }, [isDynamicTheme, skyColors]);
 
-    return { currentColor };
+    return { currentConfig };
 }
