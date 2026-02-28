@@ -66,10 +66,10 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="p-6 h-[100dvh] flex flex-col">
+    <div className="p-3 h-[100dvh] flex flex-col">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Samboard</h1>
+        <h1 className="text-2xl font-bold opacity-20">Samboard</h1>
 
         {/* Header Actions */}
         <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export default function HomePage() {
               <EllipsisHorizontalIcon className="h-6 w-6" />
             </summary>
 
-            <ul className="menu dropdown-content rounded-box z-10 w-40 p-2 shadow">
+            <ul className="menu dropdown-content rounded-box z-10 w-40 p-2 shadow backdrop-blur-md border border-solid">
               <li>
                 <button onClick={() => setModalOpen(true)}>Add Bookmark</button>
               </li>

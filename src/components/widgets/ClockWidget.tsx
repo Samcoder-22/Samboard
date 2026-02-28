@@ -22,7 +22,7 @@ import { Inter } from "next/font/google";
 
 const outfit = Inter({
   subsets: ["latin"],
-  weight: ["600"], // You can add other weights, e.g., "700" for bold
+  weight: ["700"], // You can add other weights, e.g., "700" for bold
   display: "swap", // Prevents invisible text on load
 });
 
@@ -45,7 +45,7 @@ export default function ClockWidget() {
   return (
     <div className="flex items-center justify-center">
       <span
-        className={`${outfit.className} text-7xl md:text-8xl tabular-nums drop-shadow-[0_0_12px_rgba(255,255,255,0.15)]`}
+        className={`${outfit.className} text-8xl md:text-9xl tabular-nums drop-shadow-[0_0_12px_rgba(255,255,255,0.3)] text-opacity-80`}
       >
         {time}
       </span>

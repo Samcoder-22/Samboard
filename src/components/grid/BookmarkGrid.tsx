@@ -53,7 +53,7 @@ export default function BookmarkGrid({ rows = 1, cols = 4 }: BookmarkGridProps) 
             href={bm.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center p-4 rounded-2xl shadow hover:shadow-lg transition glass"
+            className="flex flex-col items-center p-3 rounded-2xl shadow hover:shadow-lg transition glass"
           >
             {bm.icon ? (
               <img src={bm.icon} alt={bm.title} className="w-8 h-8 mb-2" />

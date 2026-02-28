@@ -42,8 +42,8 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal modal-open bg-black/50 backdrop-blur-xl">
-      <div className="modal-box max-w-4xl w-full h-[70vh] flex p-0 rounded-2xl shadow-3xl bg-base-100 overflow-hidden relative border border-solid">
+    <div className="modal modal-open bg-black/50 backdrop-blur-">
+      <div className="modal-box max-w-4xl w-full h-[70vh] flex p-0 rounded-2xl backdrop-blur-md shadow-3xl bg-base-100 overflow-hidden relative border border-solid">
         <button
           onClick={onClose}
           className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-50 text-base-content/70 hover:bg-base-200"
