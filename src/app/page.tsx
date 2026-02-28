@@ -8,7 +8,7 @@ import { EllipsisHorizontalIcon, EyeSlashIcon } from "@heroicons/react/24/outlin
 import SearchBar from "@/components/widgets/Searchbar";
 import ClockWidget from "@/components/widgets/ClockWidget";
 import { useSettingsStore } from "@/stores/settingsStore";
-// import { updateDynamicWallpaper } from "@/lib/utils/updateDynamicWallpaper";
+import { useDynamicTheme } from "@/hooks/useDynamicTheme";
 
 export default function HomePage() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -16,6 +16,8 @@ export default function HomePage() {
   const [isSettingsModalOpen, setSettingsModalOpen] = useState(false);
   const { isIncognito, toggleIncognito } = useSettingsStore();
   const dropdownRef = useRef<HTMLDetailsElement>(null);
+
+  useDynamicTheme();
 
   //   useEffect(() => {
   //   updateDynamicWallpaper();
@@ -55,6 +57,9 @@ export default function HomePage() {
     if (typeof window === "undefined") return;
     const savedTheme = (localStorage.getItem("theme") as "light" | "dark") ?? "light";
     useSettingsStore.getState().setTheme(savedTheme);
+
+    const savedDynamicTheme = localStorage.getItem("dynamicTheme") === "true";
+    useSettingsStore.getState().setDynamicTheme(savedDynamicTheme);
 
     const savedIncognito = localStorage.getItem("incognito") === "true";
     useSettingsStore.getState().setIncognito(savedIncognito);
@@ -112,7 +117,7 @@ export default function HomePage() {
       </div>
 
       {/* Bookmarks */}
-      <div className="flex-1 overflow-y-auto md:w-[50vw] mx-auto p-2 rounded-2xl">
+      <div className="flex-1 overflow-y-auto md:w-[50vw] mx-auto rounded-2xl">
         <BookmarkGrid rows={3} cols={4} />
       </div>
       <div className="md:hidden block w-full max-w-xl">

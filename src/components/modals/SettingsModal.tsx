@@ -23,7 +23,7 @@ const sections: SettingsSection[] = [
 ];
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
-  const { theme, toggleTheme, setTheme } = useSettingsStore();
+  const { theme, toggleTheme, setTheme, isDynamicTheme, setDynamicTheme } = useSettingsStore();
   const [active, setActive] = useState<string>(sections[0].id);
 
   const bookmarks = useBookmarksStore((s) => s.bookmarks);
@@ -80,16 +80,32 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <div className="space-y-8">
                 <div className="form-control">
                   <label className="label cursor-pointer justify-start gap-4">
+                    <span className="label-text text-lg font-medium">Dynamic Sky Theme</span>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-secondary"
+                      checked={isDynamicTheme}
+                      onChange={(e) => setDynamicTheme(e.target.checked)}
+                    />
+                  </label>
+                  <p className="text-sm opacity-60 mt-2">
+                    Automatically changes the background based on the time of day.
+                  </p>
+                </div>
+
+                <div className="form-control">
+                  <label className={`label cursor-pointer justify-start gap-4 ${isDynamicTheme ? 'opacity-50' : ''}`}>
                     <span className="label-text text-lg font-medium">Dark Mode</span>
                     <input
                       type="checkbox"
                       className="toggle toggle-primary"
                       checked={theme === "dark"}
                       onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
+                      disabled={isDynamicTheme}
                     />
                   </label>
                   <p className="text-sm opacity-60 mt-2">
-                    Switch between light and dark themes for better visibility.
+                    Switch between light and dark themes manually. (Disabled when Dynamic Theme is active)
                   </p>
                 </div>
               </div>

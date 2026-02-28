@@ -10,6 +10,8 @@ interface SettingsState {
   isIncognito: boolean;
   toggleIncognito: () => void;
   setIncognito: (v: boolean) => void;
+  isDynamicTheme: boolean;
+  setDynamicTheme: (v: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
@@ -30,6 +32,17 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   toggleTheme: () => {
     const next = get().theme === "light" ? "dark" : "light";
     get().setTheme(next);
+  },
+
+  isDynamicTheme: false,
+
+  setDynamicTheme: (v: boolean) => {
+    set({ isDynamicTheme: v });
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("dynamicTheme", v.toString());
+      } catch { }
+    }
   },
 
   isIncognito: false,
