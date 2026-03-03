@@ -1,3 +1,5 @@
+<img width="4606" height="2416" alt="image" src="https://github.com/user-attachments/assets/8a332998-3161-47f4-91bc-3c81a728d29d" />
+
 # Samboard — Privacy-First Custom Homepage
 
 Samboard is an offline-first browser homepage built with Next.js and TypeScript.  
