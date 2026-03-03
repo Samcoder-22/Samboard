@@ -164,7 +164,7 @@ export default function AddBookmarkModal({
             <input
               type="text"
               placeholder="https://example.com"
-              className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="input input-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               required
@@ -178,8 +178,8 @@ export default function AddBookmarkModal({
             </label>
             <input
               type="text"
-              placeholder="My Awesome Site"
-              className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              placeholder="Site Name"
+              className="input input-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -189,7 +189,7 @@ export default function AddBookmarkModal({
             <button type="button" className="btn btn-ghost" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary px-8">
+            <button type="submit" className="btn btn-primary bg-primary border-primary text-primary-content px-8 rounded-xl hover:opacity-90">
               Save Bookmark
             </button>
           </div>

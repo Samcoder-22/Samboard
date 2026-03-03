@@ -63,7 +63,7 @@ export default function SearchBar() {
         if (!isIncognito) {
           addSearchRecord(searchQuery);
         }
-        if(searchQuery.trim().endsWith(".com")) {
+        if (searchQuery.trim().endsWith(".com")) {
           const url = searchQuery.trim();
           window.location.href = `https://${url}`;
           return;
@@ -125,7 +125,7 @@ export default function SearchBar() {
           setTimeout(() => setIsFocused(false), 200);
         }}
         placeholder={showPlaceholder ? "Search bookmarks or press '/'..." : ""}
-        className="input input-bordered w-full rounded-full h-14 text-lg pl-6 pr-14 focus:outline-none focus:ring-2 focus:ring-primary shadow-sm transition-shadow"
+        className="input input-bordered w-full rounded-full h-14 text-lg pl-6 pr-14 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-sm transition-shadow"
       />
       {searchQuery ? (
         <button

@@ -43,7 +43,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
   return (
     <div className="modal modal-open bg-black/50 backdrop-blur-">
-      <div className="modal-box max-w-4xl w-full h-[70vh] flex p-0 rounded-2xl backdrop-blur-md shadow-3xl bg-base-100 overflow-hidden relative border border-solid">
+      <div className="modal-box max-w-4xl w-full h-[80vh] md:h-[70vh] flex flex-col md:flex-row p-0 rounded-2xl backdrop-blur-md shadow-3xl bg-base-100 overflow-hidden relative border border-solid">
         <button
           onClick={onClose}
           className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-50 text-base-content/70 hover:bg-base-200"
@@ -52,13 +52,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         </button>
 
         {/* Sidebar */}
-        <div className="w-1/4 bg-base-200/50 p-6 border-r border-base-content/5">
-          <h2 className="text-xl font-bold mb-6 px-2">Settings</h2>
-          <ul className="space-y-2">
+        <div className="w-full md:w-1/4 bg-base-200/50 p-4 md:p-6 border-b md:border-b-0 md:border-r border-base-content/5 flex-shrink-0">
+          <h2 className="text-xl font-bold mb-2 md:mb-6 px-2 hidden md:block">Settings</h2>
+          <ul className="flex md:block overflow-x-auto md:overflow-visible space-x-2 md:space-x-0 md:space-y-2 pb-2 md:pb-0 scrollbar-hide">
             {sections.map((section) => (
-              <li key={section.id}>
+              <li key={section.id} className="flex-shrink-0">
                 <button
-                  className={`w-full text-left px-4 py-2 rounded-lg transition-all ${active === section.id
+                  className={`w-full text-left px-4 py-2 rounded-lg transition-all whitespace-nowrap ${active === section.id
                     ? "bg-primary text-primary-content font-medium shadow-sm"
                     : "hover:bg-base-200 text-base-content/70"
                     }`}
@@ -72,7 +72,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-8 overflow-y-auto">
+        <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full">
           {active === "appearance" && (
             <div className="max-w-xl animate-in fade-in duration-300">
               <h3 className="text-2xl font-bold mb-6">Appearance</h3>

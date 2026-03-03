@@ -151,11 +151,11 @@ export default function EditBookmarkModal({
           </table>
         </div>
 
-        <div className="modal-action mt-6">
+        {/* <div className="modal-action mt-6">
           <button className="btn" onClick={onClose}>
             Close
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
