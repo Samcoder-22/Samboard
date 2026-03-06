@@ -9,6 +9,7 @@ import SearchBar from "@/components/widgets/Searchbar";
 import ClockWidget from "@/components/widgets/ClockWidget";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { useDynamicTheme } from "@/hooks/useDynamicTheme";
+import { useGridLayout } from "@/hooks/useGridLayout"
 
 export default function HomePage() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -17,6 +18,8 @@ export default function HomePage() {
   const { isIncognito, toggleIncognito } = useSettingsStore();
   const dropdownRef = useRef<HTMLDetailsElement>(null);
 
+  const {cols, rows} = useGridLayout()
+  // console.log(cols, rows)
   useDynamicTheme();
 
   //   useEffect(() => {
@@ -66,7 +69,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="p-3 h-[100dvh] flex flex-col">
+    <div className="p-3 h-[100dvh] flex flex-col max-w-[2560px] max-h-[1440px] mx-auto">
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold opacity-20">Samboard</h1>
@@ -118,7 +121,7 @@ export default function HomePage() {
 
       {/* Bookmarks */}
       <div className="flex-1 overflow-y-auto md:w-[50vw] mx-auto rounded-2xl">
-        <BookmarkGrid rows={3} cols={4} />
+        <BookmarkGrid rows={rows} cols={cols} />
       </div>
       <div className="md:hidden block w-full max-w-xl">
         <SearchBar />

@@ -34,7 +34,7 @@ export default function EditBookmarkModal({
   if (!isOpen) return null;
 
   return (
-    <div className="modal modal-open bg-black/50 backdrop-blur-">
+    <div className="modal modal-open g-black/50 backdrop-blur-">
       <div className="modal-box relative max-w-3xl p-6 rounded-2xl shadow-xl border border-solid backdrop-blur-md">
         <button
           onClick={onClose}

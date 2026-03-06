@@ -186,3 +186,10 @@ textarea,
   border-color: var(--glass-border);
 
 }
+
+/* Subtle 'press' effect for tiles when triggered */
+.tile-active:active {
+  transform: translateY(2px) scale(0.98);
+  filter: brightness(0.9);
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
