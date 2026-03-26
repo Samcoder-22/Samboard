@@ -17,7 +17,7 @@ export default function BookmarkPagination({
   return (
     <div className="flex items-center justify-center gap-2 mt-4">
       <button
-        className="btn btn-sm"
+        className="btn btn-sm btn-outline"
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
       >
@@ -29,7 +29,7 @@ export default function BookmarkPagination({
       </span>
 
       <button
-        className="btn btn-sm"
+        className="btn btn-sm btn-outline"
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages}
       >

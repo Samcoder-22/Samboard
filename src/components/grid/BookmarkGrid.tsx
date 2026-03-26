@@ -62,7 +62,7 @@ export default function BookmarkGrid({ rows = 1, cols = 4 }: BookmarkGridProps) 
                 {bm.title?.[0]?.toUpperCase() ?? "?"}
               </div>
             )}
-            <span className="text-sm">{bm.title}</span>
+            <span className="text-xs md:text-sm">{bm.title}</span>
           </a>
         ))}
       </div>

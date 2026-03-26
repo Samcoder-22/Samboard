@@ -184,7 +184,7 @@ textarea,
   background-color: var(--background);
   color: var(--foreground);
   border-color: var(--glass-border);
-
+  background-color: oklch(100% 0.00011 271.152 / 0.158);
 }
 
 /* Subtle 'press' effect for tiles when triggered */
@@ -192,4 +192,8 @@ textarea,
   transform: translateY(2px) scale(0.98);
   filter: brightness(0.9);
   transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal{
+  background-color: oklch(0% 0 0 / 0);
 }

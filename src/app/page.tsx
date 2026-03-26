@@ -91,17 +91,17 @@ export default function HomePage() {
               <EllipsisHorizontalIcon className="h-6 w-6" />
             </summary>
 
-            <ul className="menu dropdown-content rounded-box z-10 w-40 p-2 shadow backdrop-blur-md border border-solid">
+            <ul className="menu dropdown-content rounded-box z-10 w-40 p-1 md:p-2 shadow backdrop-blur-md border border-solid glass">
               <li>
-                <button onClick={() => setModalOpen(true)}>Add Bookmark</button>
+                <button onClick={() => {setModalOpen(true);dropdownRef.current?.removeAttribute("open");}}>Add Bookmark</button>
               </li>
               <li>
-                <button onClick={() => setEditModalOpen(true)}>
+                <button onClick={() => {setEditModalOpen(true);dropdownRef.current?.removeAttribute("open");}}>
                   Edit Bookmarks
                 </button>
               </li>
               <li>
-                <button onClick={() => setSettingsModalOpen(true)}>
+                <button onClick={() => {setSettingsModalOpen(true);dropdownRef.current?.removeAttribute("open");}}>
                   Settings
                 </button>
               </li>
@@ -130,7 +130,7 @@ export default function HomePage() {
       {/* Modals */}
       <AddBookmarkModal
         isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {setModalOpen(false);}}
       />
       <EditBookmarkModal
         isOpen={isEditModalOpen}
