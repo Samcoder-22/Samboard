@@ -61,7 +61,8 @@ export default function HomePage() {
     const savedTheme = (localStorage.getItem("theme") as "light" | "dark") ?? "light";
     useSettingsStore.getState().setTheme(savedTheme);
 
-    const savedDynamicTheme = localStorage.getItem("dynamicTheme") === "true";
+    const savedDynamicThemeStr = localStorage.getItem("dynamicTheme");
+    const savedDynamicTheme = savedDynamicThemeStr !== null ? savedDynamicThemeStr === "true" : true;
     useSettingsStore.getState().setDynamicTheme(savedDynamicTheme);
 
     const savedIncognito = localStorage.getItem("incognito") === "true";
@@ -81,10 +82,10 @@ export default function HomePage() {
             className={`btn btn-ghost btn-circle m-1 ${isIncognito ? "text-primary bg-primary/10" : "text-base-content/50"}`}
             onClick={toggleIncognito}
             title={isIncognito ? "Incognito Mode is ON" : "Incognito Mode is OFF"}
+
           >
             <EyeSlashIcon className="h-6 w-6" />
           </button>
-
           {/* Dropdown */}
           <details ref={dropdownRef} className="dropdown dropdown-end">
             <summary className="btn btn-ghost btn-circle m-1">

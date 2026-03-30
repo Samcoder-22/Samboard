@@ -34,7 +34,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     get().setTheme(next);
   },
 
-  isDynamicTheme: false,
+  isDynamicTheme: true,
 
   setDynamicTheme: (v: boolean) => {
     set({ isDynamicTheme: v });
