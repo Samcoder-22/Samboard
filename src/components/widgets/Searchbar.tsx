@@ -10,18 +10,20 @@ export default function SearchBar() {
   const setSearchQuery = useBookmarksStore((s) => s.setSearchQuery);
   const [isFocused, setIsFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { history, addSearchRecord, removeSearchRecord } = useSearchHistoryStore();
   const isIncognito = useSettingsStore((s) => s.isIncognito);
 
   // Suggestions logic: only if >= 3 chars
+  const maxSuggestions = isMobile ? 3 : 5;
   const suggestions =
     searchQuery.trim().length >= 3
       ? history
         .filter((h) => h.query.toLowerCase().includes(searchQuery.trim().toLowerCase()))
         .sort((a, b) => b.timestamp - a.timestamp)
-        .slice(0, 5)
+        .slice(0, maxSuggestions)
       : [];
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -94,6 +96,10 @@ export default function SearchBar() {
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsMobile(window.matchMedia("(max-width: 768px)").matches);
+    }
+    
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       // If user presses slash and not already focusing an input/textarea
       if (e.key === "/" && !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) {
@@ -124,7 +130,7 @@ export default function SearchBar() {
           // Delay to allow click on suggestions or clear button to register
           setTimeout(() => setIsFocused(false), 200);
         }}
-        placeholder={showPlaceholder ? "Search bookmarks or press '/'..." : ""}
+        placeholder={showPlaceholder ? (isMobile ? "Search results and bookmarks" : "Search bookmarks or press '/'...") : ""}
         className="input input-bordered w-full rounded-full h-14 text-lg pl-6 pr-14 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-sm transition-shadow"
       />
       {searchQuery ? (
@@ -142,7 +148,7 @@ export default function SearchBar() {
 
       {/* Dropdown Suggestions */}
       {isFocused && suggestions.length > 0 && (
-        <ul className="absolute top-full left-0 right-0 mt-2 bg-base-100 rounded-xl shadow-lg border border-base-200 py-2 z-50">
+        <ul className="absolute bottom-full left-0 right-0 mb-2 bg-base-100 rounded-xl shadow-lg border border-base-200 py-2 z-50">
           {suggestions.map((item, index) => (
             <li
               key={item.id}

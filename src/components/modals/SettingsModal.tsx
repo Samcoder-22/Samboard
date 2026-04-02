@@ -72,12 +72,12 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full">
+        <div className="flex-1 p-4 md:p-8 bg-base-200/25 overflow-y-auto w-full">
           {active === "appearance" && (
             <div className="max-w-xl animate-in fade-in duration-300">
               <h3 className="text-2xl font-bold mb-6">Appearance</h3>
 
-              <div className="space-y-8">
+              <div className="space-y-8 bg-base-200/50 p-6 rounded-xl">
                 <div className="form-control">
                   <label className="label cursor-pointer justify-start gap-4">
                     <span className="label-text text-lg font-medium">Dynamic Sky Theme</span>
