@@ -3,7 +3,22 @@ import { useEffect, useRef, useState } from "react";
 import { useBookmarksStore } from "@/stores/bookmarkStore";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSearchHistoryStore } from "@/stores/useSearchHistoryStore";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore, SearchEngine } from "@/stores/settingsStore";
+
+export function getSearchUrl(query: string, engine: SearchEngine): string {
+  const encoded = encodeURIComponent(query.trim());
+  switch (engine) {
+    case "Bing":
+      return `https://www.bing.com/search?q=${encoded}`;
+    case "DuckDuckGo":
+      return `https://duckduckgo.com/?q=${encoded}`;
+    case "StartPage":
+      return `https://www.startpage.com/sp/search?query=${encoded}`;
+    case "Google":
+    default:
+      return `https://www.google.com/search?q=${encoded}`;
+  }
+}
 
 export default function SearchBar() {
   const searchQuery = useBookmarksStore((s) => s.searchQuery);
@@ -12,9 +27,50 @@ export default function SearchBar() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [results, setResults] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // track latest request
+  const requestIdRef = useRef(0);
 
   const { history, addSearchRecord, removeSearchRecord } = useSearchHistoryStore();
   const isIncognito = useSettingsStore((s) => s.isIncognito);
+  const searchEngine = useSettingsStore((s) => s.searchEngine);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery.trim());
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (!debouncedQuery) {
+      setResults([]);
+      return;
+    }
+
+    const currentRequestId = ++requestIdRef.current;
+    setLoading(true);
+
+    searchAPI(debouncedQuery).then((res) => {
+      // ignore stale responses
+      if (currentRequestId !== requestIdRef.current) return;
+
+      setResults(res);
+      setLoading(false);
+    });
+  }, [debouncedQuery]);
+  function searchAPI(query: string): Promise<string[]> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([`Result for ${query}`]);
+      }, 500);
+    });
+  }
+
 
   // Suggestions logic: only if >= 3 chars
   const maxSuggestions = isMobile ? 3 : 5;
@@ -65,13 +121,23 @@ export default function SearchBar() {
         if (!isIncognito) {
           addSearchRecord(searchQuery);
         }
-        if (searchQuery.trim().endsWith(".com")) {
-          const url = searchQuery.trim();
-          window.location.href = `https://${url}`;
+        const trimmedQuery = searchQuery.trim();
+        const isUrl = 
+          trimmedQuery.toLowerCase().startsWith("http://") ||
+          trimmedQuery.toLowerCase().startsWith("https://") ||
+          trimmedQuery.toLowerCase().startsWith("www.") ||
+          trimmedQuery.toLowerCase().endsWith(".com");
+
+        if (isUrl) {
+          let url = trimmedQuery;
+          if (!/^https?:\/\//i.test(url)) {
+            url = `https://${url}`;
+          }
+          window.location.href = url;
           return;
         }
-        const encoded = encodeURIComponent(searchQuery.trim());
-        window.location.href = `https://www.google.com/search?q=${encoded}`;
+
+        window.location.href = getSearchUrl(trimmedQuery, searchEngine);
       }
     }
   };
@@ -91,15 +157,30 @@ export default function SearchBar() {
     setSelectedIndex(-1);
 
     // Perform search immediately
-    const encoded = encodeURIComponent(query.trim());
-    window.location.href = `https://www.google.com/search?q=${encoded}`;
+    const trimmedQuery = query.trim();
+    const isUrl = 
+      trimmedQuery.toLowerCase().startsWith("http://") ||
+      trimmedQuery.toLowerCase().startsWith("https://") ||
+      trimmedQuery.toLowerCase().startsWith("www.") ||
+      trimmedQuery.toLowerCase().endsWith(".com");
+
+    if (isUrl) {
+      let url = trimmedQuery;
+      if (!/^https?:\/\//i.test(url)) {
+        url = `https://${url}`;
+      }
+      window.location.href = url;
+      return;
+    }
+
+    window.location.href = getSearchUrl(trimmedQuery, searchEngine);
   };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsMobile(window.matchMedia("(max-width: 768px)").matches);
     }
-    
+
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       // If user presses slash and not already focusing an input/textarea
       if (e.key === "/" && !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) {
@@ -113,6 +194,34 @@ export default function SearchBar() {
   }, []);
 
   const showPlaceholder = !isFocused && searchQuery === "";
+
+  {
+    loading && (
+      <div className="mt-2 text-sm text-gray-500">
+        Loading...
+      </div>
+    )
+  }
+
+  {
+    !loading && results.length > 0 && (
+      <ul className="mt-2 bg-base-100 rounded-xl shadow-md border p-2">
+        {results.map((r, i) => (
+          <li key={i} className="px-3 py-2 hover:bg-base-200 rounded-md">
+            {r}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    !loading && debouncedQuery && results.length === 0 && (
+      <div className="mt-2 text-sm text-gray-500">
+        No results
+      </div>
+    )
+  }
 
   return (
     <div className="w-full max-w-2xl mx-auto relative group">
@@ -148,21 +257,21 @@ export default function SearchBar() {
 
       {/* Dropdown Suggestions */}
       {isFocused && suggestions.length > 0 && (
-        <ul className="absolute bottom-full left-0 right-0 mb-2 bg-base-100 rounded-xl shadow-lg border border-base-200 py-2 z-50">
+        <ul className="search-suggestions-dropdown absolute bottom-full left-0 right-0 mb-2 bg-base-100 rounded-xl shadow-lg border border-base-200 py-2 z-50">
           {suggestions.map((item, index) => (
             <li
               key={item.id}
-              className={`px-4 py-3 cursor-pointer flex justify-between items-center transition-colors ${index === selectedIndex ? "bg-primary/10 text-primary" : "hover:bg-base-200"
+              className={`px-4 py-3 cursor-pointer flex justify-between items-center transition-colors text-[var(--modal-text-primary)] ${index === selectedIndex ? "bg-primary/10 text-primary" : "hover:bg-base-200"
                 }`}
               onMouseDown={(e) => e.preventDefault()} // Prevent blur
               onClick={() => selectSuggestion(item.query)}
             >
               <div className="flex items-center gap-3">
                 <MagnifyingGlassIcon className="h-4 w-4 opacity-50" />
-                <span>{item.query}</span>
+                <span className="text-[var(--modal-text-primary)]">{item.query}</span>
               </div>
               <button
-                className="p-1 hover:bg-base-300 rounded-md opacity-60 hover:opacity-100 transition-colors"
+                className="p-1 hover:bg-base-300 rounded-md opacity-60 hover:opacity-100 transition-colors text-[var(--modal-text-secondary)]"
                 onClick={(e) => {
                   e.stopPropagation();
                   removeSearchRecord(item.id);

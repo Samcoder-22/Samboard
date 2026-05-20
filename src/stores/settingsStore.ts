@@ -2,6 +2,7 @@
 import { create } from "zustand";
 
 type Theme = "light" | "dark";
+export type SearchEngine = "Google" | "Bing" | "StartPage" | "DuckDuckGo";
 
 interface SettingsState {
   theme: Theme;
@@ -12,6 +13,8 @@ interface SettingsState {
   setIncognito: (v: boolean) => void;
   isDynamicTheme: boolean;
   setDynamicTheme: (v: boolean) => void;
+  searchEngine: SearchEngine;
+  setSearchEngine: (se: SearchEngine) => void;
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
@@ -59,5 +62,16 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   toggleIncognito: () => {
     const next = !get().isIncognito;
     get().setIncognito(next);
+  },
+
+  searchEngine: "Google",
+
+  setSearchEngine: (se: SearchEngine) => {
+    set({ searchEngine: se });
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("searchEngine", se);
+      } catch { }
+    }
   },
 }));

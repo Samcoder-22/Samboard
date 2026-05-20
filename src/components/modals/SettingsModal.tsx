@@ -1,7 +1,7 @@
 "use client";
 import { triggerExportDownload } from "@/lib/bookmarkIO";
 import { useBookmarksStore } from "@/stores/bookmarkStore";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore, SearchEngine } from "@/stores/settingsStore";
 import { LockClosedIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useSearchHistoryStore } from "@/stores/useSearchHistoryStore";
@@ -19,11 +19,20 @@ type SettingsSection = {
 const sections: SettingsSection[] = [
   { id: "appearance", label: "Appearance" },
   { id: "bookmarks", label: "Bookmarks" },
+  { id: "search-engine", label: "Search Engine" },
   { id: "search-history", label: "Search History" },
 ];
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
-  const { theme, toggleTheme, setTheme, isDynamicTheme, setDynamicTheme } = useSettingsStore();
+  const { 
+    theme, 
+    toggleTheme, 
+    setTheme, 
+    isDynamicTheme, 
+    setDynamicTheme,
+    searchEngine,
+    setSearchEngine
+  } = useSettingsStore();
   const [active, setActive] = useState<string>(sections[0].id);
 
   const bookmarks = useBookmarksStore((s) => s.bookmarks);
@@ -42,7 +51,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal modal-open g-black/50 backdrop-blur-">
+    <div className="modal modal-open bg-black/40 backdrop-blur-sm">
       <div className="modal-box max-w-4xl h-[80vh] md:h-[70vh] flex flex-col md:flex-row p-0 rounded-2xl backdrop-blur-md shadow-3xl bg-base-100 overflow-hidden relative border border-solid">
         <button
           onClick={onClose}
@@ -54,13 +63,14 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         {/* Sidebar */}
         <div className="w-full md:w-1/4 bg-base-200/50 p-4 md:p-6 border-b md:border-b-0 md:border-r border-base-content/5 flex-shrink-0">
           <h2 className="text-xl font-bold mb-2 md:mb-6 px-2 hidden md:block">Settings</h2>
+          <div className="mt-4 md:mt-0">
           <ul className="flex md:block overflow-x-auto md:overflow-visible space-x-2 md:space-x-0 md:space-y-2 pb-2 md:pb-0 scrollbar-hide">
             {sections.map((section) => (
               <li key={section.id} className="flex-shrink-0">
                 <button
                   className={`w-full text-left px-4 py-2 rounded-lg transition-all whitespace-nowrap ${active === section.id
                     ? "bg-primary text-primary-content font-medium shadow-sm"
-                    : "hover:bg-base-200 text-base-content/70"
+                    : "hover:bg-base-200 text-[var(--modal-text-secondary)]"
                     }`}
                   onClick={() => setActive(section.id)}
                 >
@@ -69,6 +79,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               </li>
             ))}
           </ul>
+          </div>
         </div>
 
         {/* Content */}
@@ -133,6 +144,53 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               </div>
             </div>
           )}
+
+          {active === "search-engine" && (
+            <div className="max-w-xl animate-in fade-in duration-300">
+              <h3 className="text-2xl font-bold mb-4">Search Engine</h3>
+              <p className="text-sm opacity-70 mb-6">
+                Choose your default search engine. All search queries that are not direct URLs will be redirected to the selected provider.
+              </p>
+
+              <div className="grid grid-cols-2 gap-4">
+                {(["Google", "Bing", "StartPage", "DuckDuckGo"] as SearchEngine[]).map((engine) => {
+                  const isSelected = searchEngine === engine;
+                  return (
+                    <button
+                      key={engine}
+                      onClick={() => setSearchEngine(engine)}
+                      className={`flex flex-col items-center justify-center p-6 rounded-2xl border transition-all duration-300 hover:scale-[1.02] cursor-pointer ${
+                        isSelected
+                          ? "bg-primary/10 border-primary shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                          : "bg-base-200/50 border-base-content/5 hover:bg-base-200"
+                      }`}
+                    >
+                      {/* Search Engine Icon/Placeholder */}
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-base-100 shadow-inner">
+                        <span className="text-xl font-bold text-primary">
+                          {engine.charAt(0)}
+                        </span>
+                      </div>
+                      
+                      {/* Search Engine Name */}
+                      <span className={`font-semibold text-lg ${isSelected ? "text-primary" : "text-[var(--modal-text-primary)]"}`}>
+                        {engine}
+                      </span>
+                      
+                      {/* Selection indicator */}
+                      {/* <div className="mt-4 flex items-center gap-1.5">
+                        <span className={`w-2.5 h-2.5 rounded-full ${isSelected ? "bg-primary animate-pulse" : "bg-base-content/20"}`} />
+                        <span className="text-xs opacity-60">
+                          {isSelected ? "Selected" : "Select"}
+                        </span>
+                      </div> */}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {active === "search-history" && (
             <div className="max-w-xl animate-in fade-in duration-300">
               <div className="flex justify-between items-center mb-6">
@@ -157,13 +215,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                       <ul className="space-y-2">
                         {items.map((item) => (
                           <li key={item.id} className="flex justify-between items-center group p-2 hover:bg-base-300 rounded-lg transition-colors">
-                            <span className="font-medium">{item.query}</span>
+                            <span className="font-medium text-[var(--modal-text-primary)]">{item.query}</span>
                             <div className="flex items-center gap-3">
                               <span className="text-xs opacity-50">
                                 {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
                               <button
-                                className="p-1 hover:bg-base-400 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="p-1 hover:bg-base-400 rounded-md opacity-0 group-hover:opacity-100 transition-opacity text-[var(--modal-text-secondary)]"
                                 onClick={() => removeSearchRecord(item.id)}
                                 title="Remove"
                               >

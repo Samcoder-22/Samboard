@@ -7,7 +7,7 @@ import SettingsModal from "@/components/modals/SettingsModal";
 import { EllipsisHorizontalIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import SearchBar from "@/components/widgets/Searchbar";
 import ClockWidget from "@/components/widgets/ClockWidget";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore, SearchEngine } from "@/stores/settingsStore";
 import { useDynamicTheme } from "@/hooks/useDynamicTheme";
 import { useGridLayout } from "@/hooks/useGridLayout"
 
@@ -67,6 +67,9 @@ export default function HomePage() {
 
     const savedIncognito = localStorage.getItem("incognito") === "true";
     useSettingsStore.getState().setIncognito(savedIncognito);
+
+    const savedSearchEngine = (localStorage.getItem("searchEngine") as SearchEngine) ?? "Google";
+    useSettingsStore.getState().setSearchEngine(savedSearchEngine);
   }, []);
 
   return (

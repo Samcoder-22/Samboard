@@ -34,11 +34,11 @@ export default function EditBookmarkModal({
   if (!isOpen) return null;
 
   return (
-    <div className="modal modal-open g-black/50 backdrop-blur-">
+    <div className="modal modal-open bg-black/40 backdrop-blur-sm">
       <div className="modal-box relative max-w-3xl p-6 rounded-2xl shadow-xl border border-solid backdrop-blur-md bg-base-200/50">
         <button
           onClick={onClose}
-          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-[var(--modal-text-secondary)]"
         >
           ✕
         </button>
@@ -131,14 +131,18 @@ export default function EditBookmarkModal({
                               disabled={idx === 0}
                               onClick={() => moveBookmark(bm.id, "up")}
                             >
+                              <span className="text-lg">
                               ↑
+                              </span>
                             </button>
                             <button
                               className="btn btn-square btn-outline btn-xs"
                               disabled={idx === bookmarks.length - 1}
                               onClick={() => moveBookmark(bm.id, "down")}
                             >
+                              <span className="text-lg">
                               ↓
+                              </span>
                             </button>
                           </div>
                         </>

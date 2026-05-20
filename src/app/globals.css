@@ -18,6 +18,9 @@
   --glass: rgba(255, 255, 255, 0.6);
   --glass-border: rgba(0, 0, 0, 0.1);
   --accent: #3b82f6;
+
+  --modal-text-primary: #171717;
+  --modal-text-secondary: #555555;
 }
 
 /* ---------------------------
@@ -37,6 +40,9 @@
   --glass: rgba(0, 0, 0, 0.6);
   --glass-border: rgba(255, 255, 255, 0.1);
   --accent: #60a5fa;
+
+  --modal-text-primary: #ededed;
+  --modal-text-secondary: #aaaaaa;
 }
 
 /* ---------------------------
@@ -182,9 +188,49 @@ textarea,
 
 .modal-box {
   background-color: var(--background);
-  color: var(--foreground);
+  color: var(--modal-text-primary);
   border-color: var(--glass-border);
   background-color: oklch(100% 0.00011 271.152 / 0.158);
+}
+
+/* Modal text overrides to preserve contrast based on light/dark mode, irrespective of dynamic theme */
+.modal-box,
+.modal-box h1,
+.modal-box h2,
+.modal-box h3,
+.modal-box h4,
+.modal-box h5,
+.modal-box h6,
+.modal-box span.font-medium,
+.modal-box .text-primary {
+  color: var(--modal-text-primary) !important;
+}
+
+.modal-box p,
+.modal-box span,
+.modal-box label,
+.modal-box .label-text,
+.modal-box .text-secondary,
+.modal-box .text-xs {
+  color: var(--modal-text-secondary) !important;
+}
+
+.modal-box input,
+.modal-box textarea,
+.modal-box select,
+.modal-box .input {
+  color: var(--modal-text-primary) !important;
+}
+
+/* Suggestion dropdown text overrides */
+.search-suggestions-dropdown,
+.search-suggestions-dropdown span,
+.search-suggestions-dropdown li {
+  color: var(--modal-text-primary) !important;
+}
+
+.search-suggestions-dropdown .text-secondary {
+  color: var(--modal-text-secondary) !important;
 }
 
 /* Subtle 'press' effect for tiles when triggered */
@@ -194,6 +240,6 @@ textarea,
   transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.modal{
+.modal {
   background-color: oklch(0% 0 0 / 0);
 }
