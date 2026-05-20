@@ -2,8 +2,8 @@
 
 # Samboard — Privacy-First Custom Homepage
 
-Samboard is an offline-first browser homepage built with Next.js and TypeScript.  
-It replaces default start pages with a fast, minimal, and fully local dashboard.
+Samboard is an local first browser homepage built with Next.js and TypeScript  
+It replaces default start pages with a minimal and fully minimal and fully local homepage
 
 All data is stored in the browser. No backend, no analytics, no external services.
 
@@ -13,7 +13,7 @@ Live: https://samboard.vercel.app/
 
 ## Features
 
-### Offline-First Architecture
+### Local-First Architecture
 
 - Fully client-side application
 - No backend services or network calls
@@ -25,14 +25,14 @@ Live: https://samboard.vercel.app/
 - Automatic favicon fetching
 - Instant search and filtering
 - Paginated grid layout (handles 100+ bookmarks)
-- Keyboard-friendly navigation (shortcuts like `/` to focus search)
+- Keyboard-friendly navigation (shortcuts like '/' to focus search, shift + enter for first bookmark)
 
 ### Personalized Search
 
 - **Search History**: Local storage of past queries
-- **Smart Suggestions**: Fastest access to frequent searches (requires 3+ characters)
-- **Incognito Mode**: Toggle to disable history tracking for private sessions
-- **Direct Navigation**: Type `.com` to jump straight to a website
+- **Smart Suggestions**: Suggestions from locally stored history (3+ chars)
+- **Incognito Mode**: Toggle to disable history tracking 
+- **Direct Navigation**: Type '.com' or 'https://' to jump straight to a website
 
 ### Theming
 
@@ -42,20 +42,20 @@ Live: https://samboard.vercel.app/
 
 ### Data Portability
 
-- **JSON Export**: Download your bookmarks as a structured JSON file
+- **JSON Export**: Download your bookmarks as a structured JSON file, planning for import as well
 - **Local Persistence**: All settings and history are stored safely in your browser
 
 ---
 
 ## Engineering Decisions
 
-- Used **Zustand** for predictable, centralized state management without prop drilling
-- **Time-based Gradient Engine**: Implemented a custom hook to calculate sky colors and contrast ratios in real-time
-- **Privacy-First Search**: Implemented a local-only search history store with incognito support
+- Used Zustand to keep bookmarks, search history and settings modular without Redux overhead.
+- **Time-based Gradient Engine**: Implemented custom hook to calculate sky colors and contrast ratios in realtime
+- **Privacy-First Search**: Implemented local only search history store with incognito (see the left icon to 3 dots)
 - Separated UI components from state logic for maintainability
 - Implemented pagination to prevent performance degradation with large bookmark sets
 - Designed stores to remain serializable for future export/import support
-- Avoided external APIs to maintain zero-dependency architecture
+- Avoided external APIs to keep everything local and portable.
 
 ---
 
@@ -76,32 +76,11 @@ Live: https://samboard.vercel.app/
 ```
 src/
 ├── app/
-│   ├── page.tsx
-│   └── layout.tsx
 ├── components/
-│   ├── grid/
-│   │   ├── BookmarkGrid.tsx
-│   │   └── BookmarkPagination.tsx
-│   ├── layout/
-│   │   └── MainLayout.tsx
-│   ├── modals/
-│   │   ├── AddBookmarkModal.tsx
-│   │   ├── EditBookmarkModal.tsx
-│   │   └── SettingsModal.tsx
-│   └── widgets/
-│       ├── ClockWidget.tsx
-│       └── SearchBar.tsx
 ├── hooks/
-│   └── useDynamicTheme.ts
 ├── lib/
-│   ├── bookmarkIO.ts
-│   └── storage.ts
 ├── stores/
-│   ├── bookmarkStore.ts
-│   ├── settingsStore.ts
-│   └── useSearchHistoryStore.ts
 └── styles/
-    └── globals.css
 ```
 
 ---
@@ -120,16 +99,6 @@ Visit:
 ```
 http://localhost:3000
 ```
-
----
-
-## Roadmap
-
-- [x] JSON Export
-- [ ] JSON Import
-- [ ] Additional widgets (Weather, RSS)
-- [ ] Dynamic wallpapers (User uploads)
-- [ ] Extended keyboard shortcuts
 
 ---
 
