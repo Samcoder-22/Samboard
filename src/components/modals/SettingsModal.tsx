@@ -21,6 +21,7 @@ const sections: SettingsSection[] = [
   { id: "bookmarks", label: "Bookmarks" },
   { id: "search-engine", label: "Search Engine" },
   { id: "search-history", label: "Search History" },
+  { id: "about", label: "About Samboard" },
 ];
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
@@ -235,6 +236,57 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {active === "about" && (
+            <div className="max-w-xl animate-in fade-in duration-300">
+              <h3 className="text-2xl font-bold mb-6">About Samboard</h3>
+
+              <div className="space-y-6 bg-base-200/50 p-6 rounded-2xl border border-base-content/5">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-md overflow-hidden">
+
+                      <img src="./favicon.ico" alt="Samboard" width={100} height={100} />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-[var(--modal-text-primary)]">Samboard</h4>
+                    <p className="text-sm opacity-70 mt-1">
+                      Focused browsing with local-first control.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="divider opacity-10 my-2" />
+
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between text-sm">
+                    {/* <span className="font-semibold text-[var(--modal-text-secondary)]">Developer</span> */}
+                    <span className="font-medium text-[var(--modal-text-primary)]">Built by Sampath</span>
+                  </div>
+                </div>
+
+                {/* <div className="divider opacity-10 my-2" /> */}
+
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  <a
+                    href="https://github.com/Samcoder-22"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-outline hover:bg-base-content/10 flex items-center justify-center gap-2 transition-all duration-300 rounded-xl py-3 text-center border-base-content/10 font-semibold"
+                  >
+                    <span>GitHub</span>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/m-s-sampath-kumar-reddy-06156a218/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-outline hover:bg-base-content/10 flex items-center justify-center gap-2 transition-all duration-300 rounded-xl py-3 text-center border-base-content/10 font-semibold"
+                  >
+                    <span>LinkedIn</span>
+                  </a>
+                </div>
+              </div>
             </div>
           )}
         </div>
