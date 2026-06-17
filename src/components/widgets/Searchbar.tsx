@@ -82,23 +82,17 @@ export default function SearchBar() {
         .slice(0, maxSuggestions)
       : [];
 
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Dropdown Navigation
     if (suggestions.length > 0) {
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSelectedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev));
+        setSelectedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
         return;
       }
       if (e.key === "ArrowUp") {
         e.preventDefault();
-        if (selectedIndex === -1) {
-    setSelectedIndex(0);
-  } else {
-    setSelectedIndex(prev =>
-      Math.min(prev + 1, suggestions.length - 1)
-    );
-  }
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
         return;
       }
     }
@@ -106,11 +100,9 @@ export default function SearchBar() {
     if (e.key === "Enter") {
       e.preventDefault();
 
-      // If user selected from dropdown, set query to that
+      // If user selected from dropdown, search immediately
       if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
-        setSearchQuery(suggestions[selectedIndex].query);
-        setSelectedIndex(-1);
-        // Optional: you can immediately search that query here if desired
+        selectSuggestion(suggestions[selectedIndex].query);
         return;
       }
 
@@ -239,7 +231,7 @@ export default function SearchBar() {
           setSearchQuery(e.target.value);
           setSelectedIndex(-1);
         }}
-        onKeyUp={handleKeyUp}
+        onKeyDown={handleKeyDown}
         onFocus={() => setIsFocused(true)}
         onBlur={() => {
           // Delay to allow click on suggestions or clear button to register
