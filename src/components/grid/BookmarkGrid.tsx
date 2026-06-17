@@ -56,7 +56,7 @@ export default function BookmarkGrid({ rows = 1, cols = 4 }: BookmarkGridProps) 
             className="flex flex-col items-center p-3 rounded-2xl shadow hover:shadow-lg transition glass tile-active"
           >
             {bm.icon ? (
-              <img src={bm.icon} alt={bm.title} className="w-8 h-8 mb-2" />
+                <img src={bm.icon} alt={bm.title} className="w-8 h-8 mb-2 rounded-lg" />
             ) : (
               <div className="w-8 h-8 mb-2 rounded-full bg-slate-200 flex items-center justify-center">
                 {bm.title?.[0]?.toUpperCase() ?? "?"}

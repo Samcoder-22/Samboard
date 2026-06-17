@@ -82,7 +82,7 @@ export default function SearchBar() {
         .slice(0, maxSuggestions)
       : [];
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Dropdown Navigation
     if (suggestions.length > 0) {
       if (e.key === "ArrowDown") {
@@ -92,7 +92,13 @@ export default function SearchBar() {
       }
       if (e.key === "ArrowUp") {
         e.preventDefault();
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        if (selectedIndex === -1) {
+    setSelectedIndex(0);
+  } else {
+    setSelectedIndex(prev =>
+      Math.min(prev + 1, suggestions.length - 1)
+    );
+  }
         return;
       }
     }
@@ -181,7 +187,7 @@ export default function SearchBar() {
       setIsMobile(window.matchMedia("(max-width: 768px)").matches);
     }
 
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+    const handleGlobalKeyUp = (e: KeyboardEvent) => {
       // If user presses slash and not already focusing an input/textarea
       if (e.key === "/" && !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) {
         e.preventDefault();
@@ -189,8 +195,8 @@ export default function SearchBar() {
       }
     };
 
-    window.addEventListener("keydown", handleGlobalKeyDown);
-    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+    window.addEventListener("keyup", handleGlobalKeyUp);
+    return () => window.removeEventListener("keyup", handleGlobalKeyUp);
   }, []);
 
   const showPlaceholder = !isFocused && searchQuery === "";
@@ -233,7 +239,7 @@ export default function SearchBar() {
           setSearchQuery(e.target.value);
           setSelectedIndex(-1);
         }}
-        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
         onFocus={() => setIsFocused(true)}
         onBlur={() => {
           // Delay to allow click on suggestions or clear button to register
