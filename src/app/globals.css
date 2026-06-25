@@ -107,6 +107,10 @@
   --tw-ring-color: var(--dynamic-accent) !important;
 }
 
+[data-dynamic-theme="true"] .ring-primary {
+  --tw-ring-color: var(--dynamic-accent) !important;
+}
+
 [data-dynamic-theme="true"] .focus\:border-primary:focus {
   border-color: var(--dynamic-accent) !important;
 }

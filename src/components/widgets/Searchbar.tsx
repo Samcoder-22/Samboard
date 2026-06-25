@@ -23,6 +23,8 @@ export function getSearchUrl(query: string, engine: SearchEngine): string {
 export default function SearchBar() {
   const searchQuery = useBookmarksStore((s) => s.searchQuery);
   const setSearchQuery = useBookmarksStore((s) => s.setSearchQuery);
+  const isBookmarksOnly = useBookmarksStore((s) => s.isBookmarksOnly);
+  const setIsBookmarksOnly = useBookmarksStore((s) => s.setIsBookmarksOnly);
   const [isFocused, setIsFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isMobile, setIsMobile] = useState(false);
@@ -71,6 +73,15 @@ export default function SearchBar() {
     });
   }
 
+  useEffect(() => {
+    if (isBookmarksOnly && searchQuery.trim() !== "") {
+      const filtered = useBookmarksStore.getState().getFilteredBookmarks();
+      if (filtered.length === 1 && typeof window !== "undefined") {
+        window.location.href = filtered[0].url;
+      }
+    }
+  }, [searchQuery, isBookmarksOnly]);
+
 
   // Suggestions logic: only if >= 3 chars
   const maxSuggestions = isMobile ? 3 : 5;
@@ -83,8 +94,15 @@ export default function SearchBar() {
       : [];
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      inputRef.current?.blur();
+      setIsBookmarksOnly(false);
+      return;
+    }
+
     // Dropdown Navigation
-    if (suggestions.length > 0) {
+    if (suggestions.length > 0 && !isBookmarksOnly) {
       if (e.key === "ArrowDown") {
         e.preventDefault();
         setSelectedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
@@ -99,6 +117,14 @@ export default function SearchBar() {
 
     if (e.key === "Enter") {
       e.preventDefault();
+
+      if (isBookmarksOnly) {
+        const filtered = useBookmarksStore.getState().getFilteredBookmarks();
+        if (filtered.length > 0) {
+          window.location.href = filtered[0].url;
+        }
+        return;
+      }
 
       // If user selected from dropdown, search immediately
       if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
@@ -179,17 +205,26 @@ export default function SearchBar() {
       setIsMobile(window.matchMedia("(max-width: 768px)").matches);
     }
 
-    const handleGlobalKeyUp = (e: KeyboardEvent) => {
-      // If user presses slash and not already focusing an input/textarea
-      if (e.key === "/" && !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // If user focuses an input/textarea, do not intercept
+      if (["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) {
+        return;
+      }
+
+      if (e.key === "/") {
         e.preventDefault();
+        setIsBookmarksOnly(false);
+        inputRef.current?.focus();
+      } else if (e.key === "\\") {
+        e.preventDefault();
+        setIsBookmarksOnly(true);
         inputRef.current?.focus();
       }
     };
 
-    window.addEventListener("keyup", handleGlobalKeyUp);
-    return () => window.removeEventListener("keyup", handleGlobalKeyUp);
-  }, []);
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [setIsBookmarksOnly]);
 
   const showPlaceholder = !isFocused && searchQuery === "";
 
@@ -235,9 +270,18 @@ export default function SearchBar() {
         onFocus={() => setIsFocused(true)}
         onBlur={() => {
           // Delay to allow click on suggestions or clear button to register
-          setTimeout(() => setIsFocused(false), 200);
+          setTimeout(() => {
+            setIsFocused(false);
+            setIsBookmarksOnly(false);
+          }, 200);
         }}
-        placeholder={showPlaceholder ? (isMobile ? "Search results and bookmarks" : "Search bookmarks or press '/'...") : ""}
+        placeholder={
+          isBookmarksOnly 
+            ? (searchQuery === "" ? "Search bookmarks only..." : "")
+            : (showPlaceholder 
+                ? (isMobile ? "Search results and bookmarks" : "Search bookmarks or press '/'...") 
+                : "")
+        }
         className="input input-bordered w-full rounded-full h-14 text-lg pl-6 pr-14 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-sm transition-shadow"
       />
       {searchQuery ? (
@@ -254,7 +298,7 @@ export default function SearchBar() {
       )}
 
       {/* Dropdown Suggestions */}
-      {isFocused && suggestions.length > 0 && (
+      {isFocused && !isBookmarksOnly && suggestions.length > 0 && (
         <ul className="search-suggestions-dropdown absolute bottom-full left-0 right-0 mb-2 bg-base-100 rounded-xl shadow-lg border border-base-200 py-2 z-50">
           {suggestions.map((item, index) => (
             <li

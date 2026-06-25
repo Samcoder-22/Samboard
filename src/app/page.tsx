@@ -9,7 +9,8 @@ import SearchBar from "@/components/widgets/Searchbar";
 import ClockWidget from "@/components/widgets/ClockWidget";
 import { useSettingsStore, SearchEngine } from "@/stores/settingsStore";
 import { useDynamicTheme } from "@/hooks/useDynamicTheme";
-import { useGridLayout } from "@/hooks/useGridLayout"
+import { useGridLayout } from "@/hooks/useGridLayout";
+import { useBookmarksStore } from "@/stores/bookmarkStore";
 
 export default function HomePage() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -21,6 +22,7 @@ export default function HomePage() {
   const {cols, rows} = useGridLayout()
   // console.log(cols, rows)
   useDynamicTheme();
+  const isBookmarksOnly = useBookmarksStore((s) => s.isBookmarksOnly);
 
   //   useEffect(() => {
   //   updateDynamicWallpaper();
@@ -124,7 +126,11 @@ export default function HomePage() {
       </div>
 
       {/* Bookmarks */}
-      <div className="flex-1 overflow-y-auto md:w-[50vw] mx-auto rounded-2xl">
+      <div className={`flex-1 overflow-y-auto md:w-[50vw] mx-auto rounded-2xl transition-all duration-300 p-2 border ${
+        isBookmarksOnly 
+          ? "ring-2 ring-primary border-primary shadow-lg" 
+          : "ring-0 border-transparent"
+      }`}>
         <BookmarkGrid rows={rows} cols={cols} />
       </div>
       <div className="md:hidden block w-full max-w-xl">

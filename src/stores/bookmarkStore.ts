@@ -88,6 +88,9 @@ interface BookmarkState {
 
   getFilteredBookmarks: () => Bookmark[];
   getPagedBookmarks: (page: number, pageSize: number) => Bookmark[];
+
+  isBookmarksOnly: boolean;
+  setIsBookmarksOnly: (val: boolean) => void;
 }
 
 
@@ -153,6 +156,9 @@ export const useBookmarksStore = create<BookmarkState>((set, get) => ({
 
   sortBy: "manual",
   setSortBy: (s) => set({ sortBy: s }),
+
+  isBookmarksOnly: false,
+  setIsBookmarksOnly: (val) => set({ isBookmarksOnly: val }),
 
   // 🔎 Derived selector: central place to filter + sort
   getFilteredBookmarks: () => {
